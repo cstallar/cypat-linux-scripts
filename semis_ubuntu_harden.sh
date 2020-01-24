@@ -7,7 +7,7 @@ sudo cp /etc/firefox/syspref.js /etc/firefox/syspref.js.bak
 sudo cp systemwide_user.js	/etc/firefox/syspref.js
 cd ..
 #Installs/removes
-PACKAGE_INSTALL="acct aide-common apparmor-profiles apparmor-utils auditd debsums gnupg2 haveged libpam-apparmor libpam-cracklib libpam-tmpdir needrestart openssh-server rkhunter sysstat systemd-coredump tcpd update-notifier-common vlock open-vm-tools"
+PACKAGE_INSTALL="acct aide-common apparmor-profiles apparmor-utils auditd debsums gnupg2 apt-listbugs apt-listchanges haveged libpam-apparmor libpam-cracklib libpam-tmpdir needrestart checkrestart fail2ban openssh-server rkhunter sysstat systemd-coredump tcpd update-notifier-common vlock open-vm-tools"
   for deb_install in $PACKAGE_INSTALL; do
     sudo apt-get install -y --no-install-recommends "$deb_install"
   done
