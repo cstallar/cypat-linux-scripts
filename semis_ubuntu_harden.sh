@@ -18,13 +18,13 @@ local PACKAGE_INSTALL
   PACKAGE_INSTALL="acct aide-common apparmor-profiles apparmor-utils auditd debsums gnupg2 haveged libpam-apparmor libpam-cracklib libpam-tmpdir needrestart openssh-server rkhunter sysstat systemd-coredump tcpd update-notifier-common vlock open-vm-tools"
 
   for deb_install in $PACKAGE_INSTALL; do
-    $APT install --no-install-recommends "$deb_install"
+    apt install --no-install-recommends "$deb_install"
   done
 local PACKAGE_REMOVE
   PACKAGE_REMOVE="apport* autofs avahi* beep git pastebinit popularity-contest rsh* rsync talk* telnet* tftp* whoopsie xinetd yp-tools ypbind"
 
   for deb_remove in $PACKAGE_REMOVE; do
-    $APT purge "$deb_remove"
+    apt purge "$deb_remove"
   done
 #User interactive session
 echo "User Shells:"
