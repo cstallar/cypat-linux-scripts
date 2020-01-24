@@ -3,8 +3,20 @@
 git clone https://github.com/pyllyukko/user.js.git
 cd user.js
 make systemwide_user.js
-sudo mv /etc/firefox-esr/firefox-esr.js /etc/firefox-esr/firefox-esr.js.bak
-sudo mv systemwide_user.js	/etc/firefox-esr/firefox-esr.js
+sudo cp /etc/firefox/syspref.js /etc/firefox/syspref.js.bak
+sudo cp systemwide_user.js	/etc/firefox/syspref.js
+cd ..
+#Installs/removes
+PACKAGE_INSTALL="acct aide-common apparmor-profiles apparmor-utils auditd debsums gnupg2 haveged libpam-apparmor libpam-cracklib libpam-tmpdir needrestart openssh-server rkhunter sysstat systemd-coredump tcpd update-notifier-common vlock open-vm-tools"
+  for deb_install in $PACKAGE_INSTALL; do
+    sudo apt-get install -y --no-install-recommends "$deb_install"
+  done
+PACKAGE_REMOVE="apport* autofs avahi* beep pastebinit popularity-contest rsh* rsync talk* telnet* tftp* whoopsie xinetd yp-tools ypbind"
+
+  for deb_remove in $PACKAGE_REMOVE; do
+    sudo apt-get purge -y "$deb_remove"
+  done
+
 #Config File Drops
 git clone https://github.com/cstallar/secure-debian-configs
 cd secure-debian-configs
@@ -14,25 +26,14 @@ do
   sudo cp $(pwd)/$f /$f
 done
 cd ..
-local PACKAGE_INSTALL
-  PACKAGE_INSTALL="acct aide-common apparmor-profiles apparmor-utils auditd debsums gnupg2 haveged libpam-apparmor libpam-cracklib libpam-tmpdir needrestart openssh-server rkhunter sysstat systemd-coredump tcpd update-notifier-common vlock open-vm-tools"
 
-  for deb_install in $PACKAGE_INSTALL; do
-    apt install --no-install-recommends "$deb_install"
-  done
-PACKAGE_REMOVE
-  PACKAGE_REMOVE="apport* autofs avahi* beep git pastebinit popularity-contest rsh* rsync talk* telnet* tftp* whoopsie xinetd yp-tools ypbind"
-
-  for deb_remove in $PACKAGE_REMOVE; do
-    apt purge "$deb_remove"
-  done
 #User interactive session
 echo "User Shells:"
 cut -d: -f1,7 /etc/passwd
 echo "Make required changes"
 /bin/bash
 echo "Network Connnections (netstat -tulpn):"
-netstat -tulpn
+sudo netstat -tulpn
 echo "Make required changes"
 /bin/bash
 echo "Configure UFW"
