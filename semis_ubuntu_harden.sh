@@ -13,8 +13,19 @@ do
   sudo mv /$f /$f.bak
   sudo cp $(pwd)/$f /$f
 done
-#konstruktoid/hardening but entirely remade so as to avoid bricking
+cd ..
+local PACKAGE_INSTALL
+  PACKAGE_INSTALL="acct aide-common apparmor-profiles apparmor-utils auditd debsums gnupg2 haveged libpam-apparmor libpam-cracklib libpam-tmpdir needrestart openssh-server rkhunter sysstat systemd-coredump tcpd update-notifier-common vlock open-vm-tools"
 
+  for deb_install in $PACKAGE_INSTALL; do
+    $APT install --no-install-recommends "$deb_install"
+  done
+local PACKAGE_REMOVE
+  PACKAGE_REMOVE="apport* autofs avahi* beep git pastebinit popularity-contest rsh* rsync talk* telnet* tftp* whoopsie xinetd yp-tools ypbind"
+
+  for deb_remove in $PACKAGE_REMOVE; do
+    $APT purge "$deb_remove"
+  done
 #User interactive session
 echo "User Shells:"
 cut -d: -f1,7 /etc/passwd
@@ -23,6 +34,8 @@ echo "Make required changes"
 echo "Network Connnections (netstat -tulpn):"
 netstat -tulpn
 echo "Make required changes"
+/bin/bash
+echo "Configure UFW"
 /bin/bash
 echo "Services"
 sudo service --status-all
