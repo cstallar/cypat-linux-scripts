@@ -8,7 +8,7 @@ sudo mv systemwide_user.js	/etc/firefox-esr/firefox-esr.js
 #Config File Drops
 git clone https://github.com/cstallar/secure-debian-configs
 cd secure-debian-configs
-for f in $(find . | cut -c 3-)
+for f in $(find . -type f | grep etc | cut -c 3-)
 do
   sudo mv /$f /$f.bak
   sudo cp $(pwd)/$f /$f
