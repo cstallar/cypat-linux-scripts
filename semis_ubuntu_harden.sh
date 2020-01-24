@@ -10,7 +10,7 @@ git clone https://github.com/cstallar/secure-debian-configs
 cd secure-debian-configs
 for f in $(find . -type f | grep etc | cut -c 3-)
 do
-  sudo mv /$f /$f.bak
+  sudo cp /$f /$f.bak
   sudo cp $(pwd)/$f /$f
 done
 cd ..
@@ -20,7 +20,7 @@ local PACKAGE_INSTALL
   for deb_install in $PACKAGE_INSTALL; do
     apt install --no-install-recommends "$deb_install"
   done
-local PACKAGE_REMOVE
+PACKAGE_REMOVE
   PACKAGE_REMOVE="apport* autofs avahi* beep git pastebinit popularity-contest rsh* rsync talk* telnet* tftp* whoopsie xinetd yp-tools ypbind"
 
   for deb_remove in $PACKAGE_REMOVE; do
