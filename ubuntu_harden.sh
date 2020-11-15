@@ -1,5 +1,6 @@
 #!/bin/bash
 #Firefox Hardening
+set +e
 git clone https://github.com/pyllyukko/user.js.git
 cd user.js
 make systemwide_user.js
