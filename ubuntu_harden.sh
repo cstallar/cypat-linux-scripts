@@ -40,7 +40,9 @@ do
 done
 cd ..
 #Python script
-./easier_in.py
+sudo python3 easier_in.py
+echo "do user stuff"
+/bin/bash
 
 #AYO FILE PERMS CHECK
 chmod 700 /root
@@ -88,6 +90,8 @@ chown root:root /etc/gshadow-
 chmod 600 /etc/gshadow-
 
 #User interactive session
+echo "Enable updates from all sources (press enter to continue)"
+read
 echo "Network Connnections (netstat -tulpn):"
 sudo netstat -tulpn
 echo "Make required changes"
@@ -102,3 +106,4 @@ echo "Remove any stupid programs (games, etc) that are installed"
 sudo passwd -l root
 sudo apt update
 sudo apt dist-upgrade
+echo "Try updating from GUI now (because reasons). "
