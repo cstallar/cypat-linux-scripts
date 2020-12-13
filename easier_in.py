@@ -1,7 +1,7 @@
 #!/bin/python3
 import subprocess
 
-newPasswd = "Kachow69!!Kachow69"
+newPasswd = "Kachow69!!Kachow69!!"
 
 userstrings = subprocess.check_output("cut -d: -f1,3,7 /etc/passwd", shell=True).decode('utf-8').split("\n") 
 passwordstrings = subprocess.check_output("sudo cut -d: -f1,2 /etc/shadow", shell=True).decode('utf-8').split("\n")
@@ -35,35 +35,35 @@ for u in userstrings:
             if uname not in userList:
                 print("removing user "+uname)
                 removedUsers.append(uname)
-                subprocess.check_output("sudo userdel -r " + uname, shell=True)
+                print("sudo userdel -r " + uname)
             else:
                 usersOnSystem.append(uname)
                 if ("admin" in groups or "sudo" in groups) and uname not in adminList:
                     print("Unauth admin " + uname)
                     try:
-                        subprocess.check_output("sudo gpasswd -d " + uname + " admin", shell=True)
+                        print("sudo gpasswd -d " + uname + " admin")
                     except subprocess.CalledProcessError:
                         pass
-                    subprocess.check_output("sudo gpasswd -d " + uname + " sudo", shell=True)
+                    print("sudo gpasswd -d " + uname + " sudo")
                 elif uname in adminList and not ("admin" in groups or "sudo" in groups):
                     print("promoting admin " + uname)
-                    subprocess.check_output("sudo gpasswd -a " + uname + " sudo", shell=True)
+                    print("sudo gpasswd -a " + uname + " sudo")
             if (len(passwdDict[uname]) < 3 or passwdDict[uname][:3] != "$6$") and uname != "nobody" and uname not in removedUsers:
                 print("Creating new password for " + uname)
-                subprocess.check_output('echo '+uname+":"+newPasswd+"| sudo chpasswd", shell=True)
+                print('echo '+uname+":"+newPasswd+"| sudo chpasswd")
         else:
             if shell != "/usr/sbin/nologin" and uname != "root":
                 print("unauth shell for system user "+uname)
-                subprocess.check_output("sudo chsh -s /usr/sbin/nologin "+ uname, shell=True)
+                print("sudo chsh -s /usr/sbin/nologin "+ uname)
 
 for uname in set(userList) - set(usersOnSystem):
     if uname in adminList:
         print("adding admin "+uname)
-        subprocess.check_output("sudo useradd -G sudo " + uname, shell=True)
+        print("sudo useradd -G sudo " + uname )
     else:
         print("adding user "+uname)
-        subprocess.check_output("sudo useradd " + uname, shell=True)
-    subprocess.check_output('echo '+uname+":"+newPasswd+"| sudo chpasswd", shell=True)
+        print("sudo useradd " + uname )
+    print('echo '+uname+":"+newPasswd+"| sudo chpasswd" )
 
 
 

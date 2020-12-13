@@ -1,12 +1,7 @@
 #!/bin/bash
 #Firefox Hardening
 set +e
-git clone https://github.com/pyllyukko/user.js.git
-cd user.js
-make systemwide_user.js
-sudo cp /etc/firefox/syspref.js /etc/firefox/syspref.js.bak
-sudo cp systemwide_user.js	/etc/firefox/syspref.js
-cd ..
+
 #Fix APT
 echo "apt sources (uncomment the good ones)"
 read
@@ -16,7 +11,7 @@ sudo nano /etc/apt/sources.list
 sudo dpkg-reconfigure --priority=low unattended-upgrades
 
 #Installs/removes
-PACKAGE_INSTALL="kubuntu-desktop acct aide-common apparmor-profiles apparmor-utils auditd debsums gnupg2 apt-listbugs apt-listchanges haveged libpam-apparmor libpam-cracklib libpam-tmpdir needrestart debian-goodies debsecan fail2ban openssh-server rkhunter sysstat systemd-coredump tcpd update-notifier-common vlock open-vm-tools unattended-upgrades"
+PACKAGE_INSTALL="acct aide-common apparmor-profiles apparmor-utils auditd debsums gnupg2 apt-listbugs apt-listchanges haveged libpam-apparmor libpam-cracklib libpam-tmpdir needrestart net-tools debian-goodies debsecan fail2ban openssh-server rkhunter sysstat systemd-coredump tcpd update-notifier-common vlock open-vm-tools make unattended-upgrades"
   for deb_install in $PACKAGE_INSTALL; do
     sudo apt-get install -y --no-install-recommends "$deb_install"
   done
@@ -26,6 +21,12 @@ PACKAGE_REMOVE="apport* autofs avahi* beep pastebinit popularity-contest rsh* rs
     sudo apt-get purge -y "$deb_remove"
   done
 
+git clone https://github.com/pyllyukko/user.js.git
+cd user.js
+make systemwide_user.js
+sudo cp /etc/firefox/syspref.js /etc/firefox/syspref.js.bak
+sudo cp systemwide_user.js	/etc/firefox/syspref.js
+cd ..
 #Reinstall Corrupted Packages
 sudo apt-get install --reinstall -y $(dpkg -S $(debsums -ac) | cut -d : -f 1 | sort -u) 
 
