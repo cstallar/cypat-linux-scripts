@@ -6,7 +6,7 @@ set +e
 sudo dpkg-reconfigure --priority=low unattended-upgrades
 
 #Installs/removes
-PACKAGE_INSTALL="acct aide-common apparmor-profiles apparmor-utils auditd debsums gnupg2 apt-listbugs apt-listchanges haveged libpam-apparmor libpam-cracklib libpam-tmpdir needrestart net-tools debian-goodies debsecan fail2ban openssh-server rkhunter sysstat systemd-coredump tcpd update-notifier-common vlock open-vm-tools make unattended-upgrades"
+PACKAGE_INSTALL="acct aide-common apparmor-profiles apparmor-utils auditd debsums gnupg2 apt-listbugs apt-listchanges haveged libpam-apparmor libpam-cracklib libpam-tmpdir needrestart net-tools debian-goodies debsecan fail2ban openssh-server rkhunter sysstat systemd-coredump tcpd update-notifier-common vlock open-vm-tools make tree unattended-upgrades"
   for deb_install in $PACKAGE_INSTALL; do
     sudo apt-get install -y --no-install-recommends "$deb_install"
   done
@@ -16,14 +16,15 @@ PACKAGE_REMOVE="apport* autofs avahi* beep pastebinit popularity-contest rsh* rs
     sudo apt-get purge -y "$deb_remove"
   done
 
+#Reinstall Corrupted Packages
+sudo apt-get install --reinstall -y $(sudo dpkg -S $(sudo debsums -ac) | cut -d : -f 1 | sort -u) 
+
 git clone https://github.com/pyllyukko/user.js.git
 cd user.js
 make systemwide_user.js
 sudo cp /etc/firefox/syspref.js /etc/firefox/syspref.js.bak
 sudo cp systemwide_user.js	/etc/firefox/syspref.js
 cd ..
-#Reinstall Corrupted Packages
-sudo apt-get install --reinstall -y $(dpkg -S $(debsums -ac) | cut -d : -f 1 | sort -u) 
 
 #Config File Drops
 git clone https://github.com/cstallar/secure-debian-configs
@@ -40,49 +41,39 @@ echo "do user stuff"
 /bin/bash
 
 #AYO FILE PERMS CHECK
-chmod 700 /root
-chmod 600 /boot/grub/grub.cfg
-chown root:root /boot/grub/grub.cfg
-chmod og-rwx /boot/grub/grub.cfg
+sudo chmod 700 /root
+sudo chmod 600 /boot/grub/grub.cfg
+sudo chown root:root /boot/grub/grub.cfg
+sudo chmod og-rwx /boot/grub/grub.cfg
 
-read -p "Apache? (y/n)" APACHE
-if [ "$APACHE" = "y" ];
-  chmod 750 /etc/apache2/conf* >/dev/null 2>&1
-  chmod 511 /usr/sbin/apache2 >/dev/null 2>&1
-  chmod 750 /var/log/apache2/ >/dev/null 2>&1
-  chmod 640 /etc/apache2/conf-available/* >/dev/null 2>&1
-  chmod 640 /etc/apache2/conf-enabled/* >/dev/null 2>&1
-  chmod 640 /etc/apache2/apache2.conf >/dev/null 2>&1
-fi
+sudo chmod -R g-wx,o-rwx /var/log/*
 
-chmod -R g-wx,o-rwx /var/log/*
+sudo chown root:root /etc/ssh/sshd_config
+sudo chmod og-rwx /etc/ssh/sshd_config
 
-chown root:root /etc/ssh/sshd_config
-chmod og-rwx /etc/ssh/sshd_config
+sudo chown root:root /etc/passwd
+sudo chmod 644 /etc/passwd
 
-chown root:root /etc/passwd
-chmod 644 /etc/passwd
+sudo chown root:shadow /etc/shadow
+sudo chmod o-rwx,g-wx /etc/shadow
 
-chown root:shadow /etc/shadow
-chmod o-rwx,g-wx /etc/shadow
-
-chown root:root /etc/group
+sudo chown root:root /etc/group
 chmod 644 /etc/group
 
-chown root:shadow /etc/gshadow
-chmod o-rwx,g-rw /etc/gshadow
+sudo chown root:shadow /etc/gshadow
+sudo chmod o-rwx,g-rw /etc/gshadow
 
-chown root:root /etc/passwd-
-chmod 600 /etc/passwd-
+sudo chown root:root /etc/passwd-
+sudo chmod 600 /etc/passwd-
 
-chown root:root /etc/shadow-
-chmod 600 /etc/shadow-
+sudo chown root:root /etc/shadow-
+sudo chmod 600 /etc/shadow-
 
-chown root:root /etc/group-
-chmod 600 /etc/group-
+sudo chown root:root /etc/group-
+sudo chmod 600 /etc/group-
 
-chown root:root /etc/gshadow-
-chmod 600 /etc/gshadow-
+sudo chown root:root /etc/gshadow-
+sudo chmod 600 /etc/gshadow-
 
 #User interactive session
 echo "Enable updates from all sources (press enter to continue)"
