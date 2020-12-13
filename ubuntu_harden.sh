@@ -2,11 +2,6 @@
 #Firefox Hardening
 set +e
 
-#Fix APT
-echo "apt sources (uncomment the good ones)"
-read
-sudo nano /etc/apt/sources.list
-
 #Unattended Upgrades
 sudo dpkg-reconfigure --priority=low unattended-upgrades
 
