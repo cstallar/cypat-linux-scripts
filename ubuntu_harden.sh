@@ -36,7 +36,7 @@ do
 done
 cd ..
 #Python script
-sudo python3 easier_in.py
+#sudo python3 easier_in.py
 echo "do user stuff"
 /bin/bash
 
